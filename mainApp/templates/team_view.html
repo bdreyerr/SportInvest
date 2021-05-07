@@ -1,0 +1,198 @@
+{%load static%}
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+
+<html>
+	<head>
+		<title>SportsInvest</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+		<noscript><link rel="stylesheet" href=" {% static 'assets/css/noscript.css' %}" /></noscript>
+	</head>
+
+	<body class="is-preload" style="background-image:linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url({{team.bg_image.url}});">    
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="../../portfolio">SportsInvest</a></h1>
+						<nav>
+							<a href="#menu">{{request.user.get_full_name}}</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+				<nav id="menu">
+                    <div class="inner">
+                        <h2>{{request.user.get_full_name}}
+                            <p style="font-size: 60%;">Account Value: ${{request.user.profile.portfolio_value|floatformat:2}} </p> 
+                            <p style="font-size: 60%;">Buying Power: ${{request.user.profile.buying_power|floatformat:2}}</p>
+                            </h2>
+                        <ul class="links">
+                            <li><a href="../../portfolio">Portfolio</a></li>
+                            <li><a href="../../transactions">Transactions</a></li>
+                            <li><a href="../../banking">Banking</a></li>
+                            <li><a href="../../settings">Settings</a></li>
+                            <li><a href="../../logout">Logout</a></li>
+                        </ul>
+                        <a href="#" class="close">Close</a>
+                    </div>
+                </nav>
+
+                <!-- Banner -->
+                <section id="banner">
+                    <div class="inner">
+                        <script>
+                            var slug = "{{team.slug|escapejs}}";
+                        </script>
+                        <h2>{{team.slug}}: {{team.name}}</h2>
+                        <h2 name="market_price" id="market_price">${{team.market_price}}</h2>
+                        <p>- $13.54 (0.12%) Today</p>
+
+                        <div class="grid-container">
+                            <div class="grid-item">
+                                <div>
+                                    <canvas id="teamChart" ></canvas>
+                                </div>
+
+                                {% if userTeam %}
+                                    <div class="row" style="padding-top: 2em; padding-left: 2em; column-gap: 10%; ">
+                                        <div style="border:2px solid #ffff; border-radius: 2px; padding-top: 1em; width: 45%; padding-right: 1em;">
+                                            <label>Your Market Value</label>
+                                            <p>${{userTeam.market_value|floatformat:2}}</p>
+                                            <label>Total Return</label>
+                                            <p>${{userTeam.total_return|floatformat:2}}</p>
+                                        </div>
+                                        <div style="border:2px solid #ffff; border-radius: 2px; padding-top: 1em; width: 45%; padding-left: 1em;">
+                                            <label>Average Cost</label>
+                                            <p>${{userTeam.average_cost|floatformat:2}}</p>
+                                            <label>No. Shares:</label>
+                                            <p> {{userTeam.num_shares}}</p>
+                                        </div>
+                                    </div>
+                                {%endif%}
+                                
+                            </div>
+                            <div class="grid-item">
+                                <div>   
+                                    <h2 class="major">Trade {{ team.slug }}</h2>
+                                        <form method="POST" name='trade-team' id='trade-team'>
+                                            {% csrf_token %}
+                                            {{form.trade_choice.label_tag}}
+                                            {{form.trade_choice}}
+                                            {% if form.trade_choice.errors %}
+                                                <ul  class="error">
+                                                    {% for error in form.trade_choice.errors %}
+                                                        <li>{{ error|escape }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            <br>
+                                            {{form.num_shares.label_tag}}
+                                            {{form.num_shares}}
+                                            {% if form.num_shares.errors %}
+                                                <ul  class="error">
+                                                    {% for error in form.num_shares.errors %}
+                                                        <li>{{ error|escape }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            <br>
+                                            <h3>Market Price: ${{team.market_price|floatformat:2}}</h3>
+                                            <hr>
+                                            <label name="trade_calculation", id="trade_calculation"> Estimated Cost: </label>
+                                            <ul class="actions" style="padding-top: 2em;">
+                                                <li><input type="submit" name='trade' value="Trade" /></li>
+                                            </ul>
+                                        </form>
+
+                                        <h5 class="major"></h5>
+                                        <p>Buying Power: ${{request.user.profile.buying_power|floatformat:2}}</p>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </section>
+				
+				<!-- Wrapper -->
+					<section id="wrapper">
+
+						<!-- Content -->
+							<div class="wrapper alt style6">
+								<div class="inner">
+                                
+								<section>
+                                    <div class="inner">
+                                        <h2 class="major">History</h2>
+                                        <div class="table-wrapper">
+											<table>
+												<tbody>
+                                                    {% for transaction in history %}
+                                                        <tr>
+                                                            {% if transaction.trade_choice == '1' %}
+                                                                <td>Market Buy </td>
+                                                            {% else %}
+                                                                <td>Market Sell </td>
+                                                            {% endif %}
+                                                            <td>{{ transaction.num_shares }} shares at ${{transaction.trade_price}}</td>
+                                                            <td>${{ transaction.trade_value|floatformat:2 }}</td>
+                                                            <td>{{ transaction.date}} </td>
+                                                        </tr>
+													{% endfor %}
+												</tbody>
+											</table>
+										</div>
+                                    </div>
+                                </section>
+                                <section>
+                                    <div class="inner">
+                                        <h2 class="major">News</h2>
+                                        <section class="features">
+                                            {% for article in articles %}
+                                                <article>
+                                                    <a href="{{article.url}}" target="_blank" rel="noopener noreferrer" class="image"><img src="{{article.urlToImage}}" alt=""></a>
+                                                    <h3 class="major"><a href="{{article.url}}" target="_blank" rel="noopener noreferrer">{{article.title}}</a></h3>
+                                                    
+                                                </article>
+                                            {% endfor %}
+                                        </section>
+                                    </div>
+                                </section>
+                                
+                                
+								</div>
+							</div>
+
+				<!-- Footer -->
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src=" {% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+            
+            <script src="{% static 'assets/js/teamChart.js' %}"></script>
+            <script src = "{% static 'assets/js/trade.js' %}"></script>
+            
+
+	</body>
+</html>
+
+
+
+
+
+  

@@ -1,0 +1,180 @@
+{%load static%}
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html translate="no">
+	<head>
+		<title>SportsInvest</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+		<noscript><link rel="stylesheet" href=" {% static 'assets/css/noscript.css' %}" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Page Wrapper -->
+        <div id="page-wrapper">
+            <!-- Header -->
+            <header id="header">
+                <h1><a href="../portfolio">SportsInvest</a></h1>
+                <nav>
+                    <a href="#menu">{{request.user.get_full_name}}</a>
+                </nav>
+            </header>
+
+            <!-- Menu -->
+            <nav id="menu">
+                    <div class="inner">
+                        <h2>{{request.user.get_full_name}}
+                            <p style="font-size: 60%;">Account Value: ${{request.user.profile.portfolio_value|floatformat:2}} </p> 
+                            <p style="font-size: 60%;">Buying Power: ${{request.user.profile.buying_power|floatformat:2}}</p>
+                            </h2>
+                        <ul class="links">
+                            <li><a href="../portfolio">Portfolio</a></li>
+                            <li><a href="../transactions">Transactions</a></li>
+                            <li><a href="../banking">Banking</a></li>
+                            <li><a href="../settings">Settings</a></li>
+                            <li><a href="../logout">Logout</a></li>
+                        </ul>
+                        <a href="#" class="close">Close</a>
+                    </div>
+                </nav>
+            
+            <!-- Wrapper -->
+            <section id="wrapper">
+                <header>
+                    <div class="inner">
+                        <h2>{{request.user.get_full_name}}</h2>
+                        <p> <a style="font-style: oblique; text-decoration:underline;" href=''>Transactions</a> <a href='../banking'>Banking</a> <a href='../settings'>Settings</a> </p>
+                    </div>
+                </header>
+
+                <!-- Content -->
+                <div class="wrapper alt style4">
+                    <div class="inner">
+
+                    <section id="four">
+                        <div class="inner">
+                            <h2 class="major align-center">Transactions</h2>
+                            <section class="features">
+                                <article>
+                                    <h3 class="major">Buys</h3>
+                                    <!-- Table with team Name, Current Price, share #-->
+                                    <div class="table-wrapper">
+                                    <table class="table">
+                                         <thead>
+                                            <th>Team</th>
+                                            <th>Buy Price</th>
+                                            <th>No. Shares</th>
+                                            <th>Date</th>
+                                        </thead>
+                                        <tbody>    
+                                            {% for item in buys %}
+                                                <tr>
+                                                    <td><a href='../team/{{item.team.slug}}'>{{item.team.slug}}</a></td>
+                                                    <td> ${{item.trade_price |floatformat:2}}</td>
+                                                    <td>{{item.num_shares}}</td>
+                                                    <td>{{item.date}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% if buys.has_other_pages %}
+                                        <ul class="pagination">
+                                            {% if buys.has_previous %}
+                                                <li><a class="button small" href="?page={{ buys.previous_page_number }}">Prev</a></li>
+                                            {% else %}
+                                                <li class="disabled"><span class="button small disabled">Prev</span></li>
+                                            {% endif %}
+                                            {% for i in buys.paginator.page_range %}
+                                                {% if buys.number == i %}
+                                                    <li class="active"><a class="page active">{{ i }} <span class="sr-only">(current)</a></span></li>
+                                                {% else %}
+                                                    <li><a class="page" href="?page={{ i }}">{{ i }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if buys.has_next %}
+                                                <li><a class="button small" href="?page={{ buys.next_page_number }}">Next</a></li>
+                                            {% else %}
+                                                <li><span class="button small disabled">Next</span></li>
+                                            {% endif %}
+                                        </ul>
+                                    {% endif %}
+
+                                </div>
+                                </article>
+                                <article>
+                                    <h3 class="major">Sells</h3>
+                                    <!-- Table with team Name, Current Price, share #-->
+                                    <div class="table-wrapper">
+                                    <table class="table">
+                                        <thead>
+                                            <th>Team</th>
+                                            <th>Sell Price</th>
+                                            <th>No. Shares</th>
+                                            <th>Date</th>
+                                        </thead>
+                                        <tbody>    
+                                            {% for item in sells %}
+                                                <tr>
+                                                    <td><a href='../team/{{item.team.slug}}'>{{item.team.slug}}</a></td>
+                                                    <td> ${{item.trade_price |floatformat:2}}</td>
+                                                    <td>{{item.num_shares}}</td>
+                                                    <td>{{item.date}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% if sells.has_other_pages %}
+                                        <ul class="pagination">
+                                            {% if sells.has_previous %}
+                                                <li><a class="button small" href="?page={{ sells.previous_page_number }}">Prev</a></li>
+                                            {% else %}
+                                                <li class="disabled"><span class="button small disabled">Prev</span></li>
+                                            {% endif %}
+                                            {% for i in sells.paginator.page_range %}
+                                                {% if sells.number == i %}
+                                                    <li class="active"><a class="page active">{{ i }} <span class="sr-only">(current)</a></span></li>
+                                                {% else %}
+                                                    <li><a class="page" href="?page={{ i }}">{{ i }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if sells.has_next %}
+                                                <li><a class="button small" href="?page={{ sells.next_page_number }}">Next</a></li>
+                                            {% else %}
+                                                <li><span class="button small disabled">Next</span></li>
+                                            {% endif %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                                </article>
+                            </section>
+                        </div>
+                    </section>
+
+                    </div>
+                </div>
+
+       
+
+
+        </div>
+
+		<!-- Scripts -->
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src=" {% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>
+
+	</body>
+</html>
+
+
+
+
+
+  

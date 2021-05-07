@@ -1,0 +1,92 @@
+{%load static%}
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html translate="no">
+	<head>
+		<title>SportsInvest</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+		<noscript><link rel="stylesheet" href=" {% static 'assets/css/noscript.css' %}" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Page Wrapper -->
+        <div id="page-wrapper">
+            <!-- Header -->
+            <header id="header">
+                <h1><a href="../">SportsInvest</a></h1>
+                <nav>
+                    <a href="#menu">{{request.user.get_full_name}}</a>
+                </nav>
+            </header>
+
+            <!-- Menu -->
+            <nav id="menu">
+                    <div class="inner">
+                        <h2>{{request.user.get_full_name}}
+                            <p style="font-size: 60%;">Account Value: ${{request.user.profile.portfolio_value|floatformat:2}} </p> 
+                            <p style="font-size: 60%;">Buying Power: ${{request.user.profile.buying_power|floatformat:2}}</p>
+                            </h2>
+                        <ul class="links">
+                            <li><a href="../portfolio">Portfolio</a></li>
+                            <li><a href="../transactions">Transactions</a></li>
+                            <li><a href="../banking">Banking</a></li>
+                            <li><a href="../settings">Settings</a></li>
+                            <li><a href="../logout">Logout</a></li>
+                        </ul>
+                        <a href="#" class="close">Close</a>
+                    </div>
+                </nav>
+            
+            <!-- Wrapper -->
+            <section id="wrapper">
+                <header>
+                    <div class="inner">
+                        <h2>{{request.user.get_full_name}}</h2>
+                        <p> <a href='../transactions'>Transactions</a> <u href=''>Banking</u> <a href='../settings'>Settings</a> </p>
+                    </div>
+                </header>
+
+                <!-- Content -->
+                <div class="wrapper alt style6">
+                    <div class="inner">
+
+                    <section id="four">
+                        <div class="inner">
+                            <h2 class="major">Banking Info</h2>
+                            <p>SportsInvest is not currently accepting payment for real currency. When you created your account, you were
+                                given $500 of SportsInvest dollars in order to test the site. If you would like to request more currency,
+                                please reach out to customerservice@sportsinvest.com
+                            </p>
+                          
+                        </div>
+                    </section>
+
+                    </div>
+                </div>
+
+       
+
+
+        </div>
+
+		<!-- Scripts -->
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src=" {% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>
+
+	</body>
+</html>
+
+
+
+
+
+  

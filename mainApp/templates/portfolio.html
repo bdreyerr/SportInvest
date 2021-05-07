@@ -1,0 +1,189 @@
+{%load static%}
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html translate="no">
+	<head>
+		<title>SportsInvest</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+		<noscript><link rel="stylesheet" href=" {% static 'assets/css/noscript.css' %}" /></noscript>
+	</head>
+	<body class="is-preload" >
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="../portfolio">SportsInvest</a></h1>
+						<nav>
+							<a href="#menu">{{request.user.get_full_name}}</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+				<nav id="menu">
+                    <div class="inner">
+                        <h2>{{request.user.get_full_name}}
+                            <p style="font-size: 60%;">Account Value: ${{request.user.profile.portfolio_value|floatformat:2}} </p> 
+                            <p style="font-size: 60%;">Buying Power: ${{request.user.profile.buying_power|floatformat:2}}</p>
+                            </h2>
+                        <ul class="links">
+                            <li><a href="../portfolio">Portfolio</a></li>
+                            <li><a href="../transactions">Transactions</a></li>
+                            <li><a href="../banking">Banking</a></li>
+                            <li><a href="../settings">Settings</a></li>
+                            <li><a href="../logout">Logout</a></li>
+                        </ul>
+                        <a href="#" class="close">Close</a>
+                    </div>
+                </nav>
+
+                <!-- Banner -->
+                <section id="banner">
+                    <div class="inner">
+                        <h2>${{request.user.profile.portfolio_value|floatformat:2}}</h2>
+                        {% if netGain.sign == '+' %}
+                            <p style="color:rgb(15, 250, 78);">+
+                        {% else %}
+                            <p style="color:rgb(255, 99, 82);">
+                        {% endif %}
+                         ${{netGain.value|floatformat:2}} ({{netGain.percentage|floatformat:2}}%) Today</p>
+                        <div class="row" style="overflow-y:hidden;">
+                            <div style="width:60%;">
+                                <div>
+                                    <canvas id="chart"></canvas>
+                                </div>
+                            </div>
+                            <div style="width: 40%; max-height: 15em; overflow-y:auto; overflow-x:hidden;">
+                                <h3 class="major">Inventory</h3>
+                                <!-- Table with team Name, Current Price, share #-->
+                                <div class="table-wrapper">
+                                {% if teams|length == 0 %}
+                                            <p>You haven't made any trades yet, visit the <a href="../market">Market</a> to find a team to trade!</p>
+                                {% else %}    
+                                    <table class="table">
+                                        <thead>
+                                            <th>Team</th>
+                                            <th>Market Price</th>
+                                            <th>No. Shares</th>
+                                        </thead>
+                                        <tbody>
+                                                {% for userTeam in teams %}
+                                                    <tr>
+                                                        <td><a href='../team/{{userTeam.team.slug}}'>{{userTeam.team.slug}}</a></td>
+                                                        <td> ${{userTeam.team.market_price |floatformat:2}}</td>
+                                                        <td>{{userTeam.num_shares}}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                {% endif %}
+                            </div>
+                            </article>
+                        </div>
+                        <div class="" style="padding-left: 2.4em; padding-top:2em;">
+                            <button type="button" class="">
+                                <span class="css-dq91k1">
+                                    <span class="_3CMLnMwQwKJbe8lhR_CtI8">1d</span>
+                                </span>
+                            </button>
+                            <button type="button" class="">
+                                <span class="css-dq91k1">
+                                    <span class="_3CMLnMwQwKJbe8lhR_CtI8">1w</span>
+                                </span>
+                            </button>
+                            <button type="button" class="">
+                                <span class="css-dq91k1">
+                                    <span class="_3CMLnMwQwKJbe8lhR_CtI8">1m</span>
+                                </span>
+                            </button>
+                            <button type="button" class="">
+                                <span class="css-dq91k1">
+                                    <span class="_3CMLnMwQwKJbe8lhR_CtI8">1y</span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+				
+				<!-- Wrapper -->
+                <section id="wrapper">
+                    
+
+                    <!-- Content -->
+                        <div class="wrapper">
+                            <div class="inner">
+                            <section id="four">
+                                <div class="inner">
+                                    <h2 class="major align-center">Your Dashboard</h2>
+                                    <section class="features">
+                                        <article>
+                                            <h3 class="major" ><a href="../market">Open Market</a></h3>
+                                            
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>OKC</td>
+                                                        <!--<img style="max-width:100%; height:auto; " src=" {% static 'images/DEN.png' %}"</img> -->
+                                                        <td>$14.43</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>LAL</td>
+                                                        <td>$23.54</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>POR</td>
+                                                        <td>- $3.44</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>WAS</td>
+                                                        <td>+ $3.34</td>                                                        
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                                <div>
+                                            <p>Buying Power: ${{request.user.profile.buying_power|floatformat:2 }}</p>
+                                        </div>
+                                        </article>
+                                    </section>
+                                </div>
+                            </section>
+
+                            </div>
+                        </div>
+
+           
+
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src=" {% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+            <script src="{% static 'assets/js/chart.js' %}"></script>
+
+
+	</body>
+</html>
+
+
+
+
+
+  

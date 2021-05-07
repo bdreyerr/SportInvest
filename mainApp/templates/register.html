@@ -1,0 +1,152 @@
+{%load static%}
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>SportsInvest</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+		<noscript><link rel="stylesheet" href=" {% static 'assets/css/noscript.css' %}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">SportsInvest</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+				<nav id="menu">
+                    <div class="inner">
+                        <h2>{{request.user.get_full_name}}</h2>
+                        <ul class="links">
+                            <li><a href="../portfolio">Profile</a></li>
+                            <li><a href="../transactions">Transactions</a></li>
+                            <li><a href="../banking">Banking</a></li>
+                            <li><a href="../settings">Settings</a></li>
+                            <li><a href="../logout">Logout</a></li>
+                        </ul>
+                        <a href="#" class="close">Close</a>
+                    </div>
+                </nav>
+				
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper alt style3">
+								<div class="inner">
+
+								<section>
+									<h3 class="major align-center">Register</h3>
+									<form method="post" action="#">
+										{% csrf_token %}
+										<div class="fields">
+											<div class="field">
+												<label for="name">First Name</label>
+												{{form.first_name}}
+												{% if form.first_name.errors %}
+												<ul  class="error">
+													{% for error in form.first_name.errors %}
+														<li>{{ error|escape }}</li>
+													{% endfor %}
+													</ul>
+												{% endif %}
+											</div>
+											<div class="field">
+												<label for="name">Last Name</label>
+												{{form.last_name}}
+												{% if form.last_name.errors %}
+												<ul  class="error">
+													{% for error in form.last_name.errors %}
+														<li>{{ error|escape }}</li>
+													{% endfor %}
+												</ul>
+												{% endif %}
+											</div>
+											<div class="field">
+												<label for="name">Username</label>
+												{{form.username}}
+												{% if form.username.errors %}
+													<ul class="error">
+												{% for error in form.username.errors %}
+													<li>{{ error|escape }}</li>
+												{% endfor %}
+													</ul>
+												{% endif %}
+											</div>
+											<div class="field">
+												<label for="email">Email</label>
+												{{form.email}}
+												{% if form.email.errors %}
+												<ul  class="error">
+													{% for error in form.email.errors %}
+														<li>{{ error|escape }}</li>
+													{% endfor %}
+												</ul>
+												{% endif %}
+											</div>
+											<div class="field">
+												<label for="email">Password</label>
+												{{form.password1}}
+												{% if form.password1.errors %}
+												<ul  class="error">
+													{% for error in form.password1.errors %}
+														<li>{{ error|escape }}</li>
+													{% endfor %}
+												</ul>
+												{% endif %}
+											</div>
+											<div class="field">
+												<label for="email">Confirm Password</label>
+												{{form.password2}}
+												{% if form.password2.errors %}
+												<ul  class="error">
+												{% for error in form.password2.errors %}
+													<li>{{ error|escape }}</li>
+												{% endfor %}
+												</ul>
+											{% endif %}
+											</div>
+																				
+										</div>
+										<ul class="actions">
+											<li><input type="submit" value="Register" /></li>
+										</ul>
+									</form>
+								</section>
+
+								</div>
+							</div>
+
+				<!-- Footer -->
+
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src=" {% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>
+
+	</body>
+</html>
+
+
