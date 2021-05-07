@@ -8,4 +8,4 @@ Technologies Used:
 - ChartJS
 - New.org API
 
-!(https://i.imgur.com/6DEnDz9.mp4)
+![](https://i.imgur.com/6DEnDz9.mp4)
