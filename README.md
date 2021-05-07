@@ -8,4 +8,4 @@ Technologies Used:
 - ChartJS
 - New.org API
 
-![](https://i.imgur.com/6DEnDz9.mp4)
+![](SportsInvest - Google Chrome 2021-05-06 22-07-15_Trim (3)_Trim.gif)
