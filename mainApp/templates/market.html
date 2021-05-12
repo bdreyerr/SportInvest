@@ -20,7 +20,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="index.html">SportsInvest</a></h1>
+						<h1><a href="../">SportsInvest</a></h1>
 						<nav>
 							<a href="#menu">{{request.user.get_full_name}}</a>
 						</nav>
@@ -47,21 +47,12 @@
 				<!-- Wrapper -->
 					<section id="wrapper">
 						<header >
-							<p> Graph going in here </p>
-						</header>
-
-						<!-- Content -->
-							<div class="wrapper alt style5">
-								<div class="inner">
-
-								<section id="four">
-                                    <div class="inner">
-                                        <h2 class="major align-center">Open Market</h2>
-                                        <h3 class="major align-center">Portfolio Value: ${{request.user.profile.portfolio_value|floatformat:2}} </h3>
+							<h2 class="major align-center">Open Market</h2>
+                                        <h3 class="major align-center">Buying Power: ${{request.user.profile.buying_power|floatformat:2}} </h3>
                                         <section class="features">
                                             </article>
                                             <article>
-                                                <h3 class="major" ><a href="#">Highest Valued</a></h3>
+                                                <h3 class="major" ><a href="#">League Leaders</a></h3>
                                                 <table class="table">
                                                     <thead>
                                                         <th>Team</th>
@@ -69,7 +60,7 @@
                                                         <th>Weekly Gain</th>
                                                     </thead>
                                                     <tbody>    
-                                                        {% for team in teams %}
+                                                        {% for team in league_leaders %}
                                                             <tr>
                                                                 <td><a href='../team/{{team.slug}}'>{{team.slug}}</a></td>
                                                                 <td> ${{team.market_price |floatformat:2}}</td>
@@ -86,7 +77,7 @@
                                             </div>
                                             </article>
                                             <article class=" article alt">
-                                                <h3 class="major" ><a href="#">Top Movers</a></h3>
+                                                <h3 class="major" ><a href="#">Highest Valued</a></h3>
                                                 <table class="table">
                                                     <thead>
                                                         <th>Team</th>
@@ -94,7 +85,7 @@
                                                         <th>Weekly Gain</th>
                                                     </thead>
                                                     <tbody>    
-                                                        {% for team in teams %}
+                                                        {% for team in top_teams %}
                                                             <tr>
                                                                 <td><a href='../team/{{team.slug}}'>{{team.slug}}</a></td>
                                                                 <td> ${{team.market_price |floatformat:2}}</td>
@@ -111,11 +102,10 @@
                                             </div>
                                             </article>
                                         </section>
-                                    </div>
-                                </section>
+						</header>
 
-								</div>
-							</div>
+						<!-- Content -->
+							
 
 				<!-- Footer -->
 

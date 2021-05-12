@@ -1,10 +1,6 @@
 {%load static%}
 <!DOCTYPE HTML>
-<!--
-	Solid State by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
+
 <html translate="no">
 	<head>
 		<title>SportsInvest</title>
@@ -56,7 +52,7 @@
                          ${{netGain.value|floatformat:2}} ({{netGain.percentage|floatformat:2}}%) Today</p>
                         <div class="row" style="overflow-y:hidden;">
                             <div style="width:60%;">
-                                <div>
+                                <div id = "chart-container">
                                     <canvas id="chart"></canvas>
                                 </div>
                             </div>
@@ -76,7 +72,7 @@
                                         <tbody>
                                                 {% for userTeam in teams %}
                                                     <tr>
-                                                        <td><a href='../team/{{userTeam.team.slug}}'>{{userTeam.team.slug}}</a></td>
+                                                        <td style="font-size:x-large;"><a href='../team/{{userTeam.team.slug}}'>{{userTeam.team.slug}}</a></td>
                                                         <td> ${{userTeam.team.market_price |floatformat:2}}</td>
                                                         <td>{{userTeam.num_shares}}</td>
                                                     </tr>
@@ -92,22 +88,22 @@
                             </article>
                         </div>
                         <div class="" style="padding-left: 2.4em; padding-top:2em;">
-                            <button type="button" class="">
+                            <button type="button" id="1d" class="">
                                 <span class="css-dq91k1">
                                     <span class="_3CMLnMwQwKJbe8lhR_CtI8">1d</span>
                                 </span>
                             </button>
-                            <button type="button" class="">
+                            <button type="button" id="1w" class="">
                                 <span class="css-dq91k1">
                                     <span class="_3CMLnMwQwKJbe8lhR_CtI8">1w</span>
                                 </span>
                             </button>
-                            <button type="button" class="">
+                            <button type="button" id="1m" class="">
                                 <span class="css-dq91k1">
                                     <span class="_3CMLnMwQwKJbe8lhR_CtI8">1m</span>
                                 </span>
                             </button>
-                            <button type="button" class="">
+                            <button type="button"id="1y" class="">
                                 <span class="css-dq91k1">
                                     <span class="_3CMLnMwQwKJbe8lhR_CtI8">1y</span>
                                 </span>
@@ -125,15 +121,14 @@
                             <div class="inner">
                             <section id="four">
                                 <div class="inner">
-                                    <h2 class="major align-center">Your Dashboard</h2>
+                                    <h2 class="major align-center">Find your team</h2>
                                     <section class="features">
                                         <article>
-                                            <h3 class="major" ><a href="../market">Open Market</a></h3>
-                                            
+                                            <h3 class="major" ><a href="../market">League Leaders</a></h3>
                                             <table class="table">
                                                 <tbody>
                                                     <tr>
-                                                        <td>OKC</td>
+                                                        <td>BKN</td>
                                                         <!--<img style="max-width:100%; height:auto; " src=" {% static 'images/DEN.png' %}"</img> -->
                                                         <td>$14.43</td>
                                                     </tr>

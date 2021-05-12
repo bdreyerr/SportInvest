@@ -51,14 +51,36 @@
                         <script>
                             var slug = "{{team.slug|escapejs}}";
                         </script>
-                        <h2>{{team.slug}}: {{team.name}}</h2>
+                        <h2>{{team.slug}}: {{team.full_name}}</h2>
                         <h2 name="market_price" id="market_price">${{team.market_price}}</h2>
                         <p>- $13.54 (0.12%) Today</p>
 
                         <div class="grid-container">
                             <div class="grid-item">
-                                <div>
+                                <div id="chart-container">
                                     <canvas id="teamChart" ></canvas>
+                                </div>
+                                <div class="" style="padding-left: 2.4em; padding-top:2em;">
+                                    <button type="button" id="1d" class="">
+                                        <span class="css-dq91k1">
+                                            <span class="_3CMLnMwQwKJbe8lhR_CtI8">1d</span>
+                                        </span>
+                                    </button>
+                                    <button type="button" id="1w" class="">
+                                        <span class="css-dq91k1">
+                                            <span class="_3CMLnMwQwKJbe8lhR_CtI8">1w</span>
+                                        </span>
+                                    </button>
+                                    <button type="button" id="1m" class="">
+                                        <span class="css-dq91k1">
+                                            <span class="_3CMLnMwQwKJbe8lhR_CtI8">1m</span>
+                                        </span>
+                                    </button>
+                                    <button type="button"id="1y" class="">
+                                        <span class="css-dq91k1">
+                                            <span class="_3CMLnMwQwKJbe8lhR_CtI8">1y</span>
+                                        </span>
+                                    </button>
                                 </div>
 
                                 {% if userTeam %}

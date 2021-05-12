@@ -40,7 +40,7 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 class Team(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    full_name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(max_length=255, unique=True, default='NaN')
     market_price = models.FloatField(default=1.0)
     description = models.TextField(max_length=400, blank=True)
@@ -51,7 +51,7 @@ class Team(models.Model):
         get_latest_by = 'market_price'
 
     def __str__(self):
-        return self.name
+        return self.full_name + ' ' + self.slug
     
     #def save(self, *args, **kwargs):
         #self.background_image_url= "background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url( '{% static 'images/" +str(self.slug)+".jpg' %}' );"
@@ -87,7 +87,7 @@ class UserOwnedTeam(models.Model):
     total_return = models.FloatField(default=0)
     
     def __str__(self):
-        return self.user.username + self.team.name
+        return self.user.username + self.team.full_name
 
 
 class UserValueTimestamp(models.Model):
@@ -106,6 +106,6 @@ class TeamValueTimestamp(models.Model):
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=False)
 
     def __str__(self):
-        return self.team.name + ' TVT ' + str(self.timestamp)
+        return self.team.full_name + ' TVT ' + str(self.timestamp)
 
 

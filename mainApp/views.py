@@ -7,6 +7,8 @@ from .models import Team, Transaction, UserOwnedTeam, UserValueTimestamp, TeamVa
 from django.views import generic
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
+from django.core.management import call_command
+
 
 # rest framework
 from rest_framework.views import APIView
@@ -18,7 +20,8 @@ from rest_framework.permissions import IsAuthenticated
 import logging, datetime, requests, json, os
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
 
-
+# nba-api
+from nba_api.stats.endpoints import leaguestandingsv3
 
 
 
@@ -87,20 +90,61 @@ class ChartData(APIView):
         timestampsMonth = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromMonth).order_by('timestamp')
         timestampsYear = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromYear).order_by('timestamp')
 
-        chartdata = []
-        labels=[]
+        
+        ''' Fill Day Chart Data '''
+        chartdataDay = []
+        labelsDay=[]
         for stamp in timestampsDay:
-            chartdata.append(stamp.value)
+            
+            chartdataDay.append(stamp.value)
             dt = stamp.timestamp
             format = '%m-%d %I:%M %p'
             label = dt.strftime(format)
-            labels.append(label)
+            labelsDay.append(label)
+
+        ''' Fill Week Chart Data '''
+        chartdataWeek = []
+        labelsWeek=[]
+        for stamp in timestampsWeek:
+            chartdataWeek.append(stamp.value)
+            dt = stamp.timestamp
+            format = '%m-%d %I:%M %p'
+            label = dt.strftime(format)
+            labelsWeek.append(label)
+
+        ''' Fill Month Chart Data '''
+        chartdataMonth = []
+        labelsMonth=[]
+        for stamp in timestampsMonth:
+            chartdataMonth.append(stamp.value)
+            dt = stamp.timestamp
+            format = '%m-%d %I:%M %p'
+            label = dt.strftime(format)
+            labelsMonth.append(label)
+        
+
+        ''' Fill Year Chart Data '''
+        chartdataYear = []
+        labelsYear=[]
+        for stamp in timestampsYear:
+            chartdataYear.append(stamp.value)
+            dt = stamp.timestamp
+            format = '%m-%d %I:%M %p'
+            label = dt.strftime(format)
+            labelsYear.append(label)
+
         
         chartLabel = ""
         data ={
-                     "labels":labels,
+                     "labelsDay":labelsDay,
+                     "labelsWeek":labelsWeek,
+                     "labelsMonth":labelsMonth,
+                     "labelsYear":labelsYear,
                      "chartLabel":chartLabel,
-                     "chartdata":chartdata,
+                     "chartdataDay":chartdataDay,
+                     "chartdataWeek":chartdataWeek,
+                     "chartdataMonth":chartdataMonth,
+                     "chartdataYear":chartdataYear,
              }
         return Response(data)
 
@@ -108,8 +152,6 @@ class TeamChartData(APIView):
     # authenticate user
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
-
-    
 
     def get(self,request, format=None, *args, **kwargs):
         url = request.build_absolute_uri()
@@ -121,20 +163,58 @@ class TeamChartData(APIView):
         timestampsMonth = TeamValueTimestamp.objects.filter(team=team, timestamp__gte=date_fromMonth).order_by('timestamp')
         timestampsYear = TeamValueTimestamp.objects.filter(team=team, timestamp__gte=date_fromYear).order_by('timestamp')
 
-        chartdata = []
-        labels=[]
+        ''' Fill Day Chart Data '''
+        chartdataDay = []
+        labelsDay=[]
         for stamp in timestampsDay:
-            chartdata.append(stamp.value)
+            chartdataDay.append(stamp.value)
             dt = stamp.timestamp
             format = '%m-%d %I:%M %p'
             label = dt.strftime(format)
-            labels.append(label)
+            labelsDay.append(label)
+
+        ''' Fill Week Chart Data '''
+        chartdataWeek = []
+        labelsWeek=[]
+        for stamp in timestampsWeek:
+            chartdataWeek.append(stamp.value)
+            dt = stamp.timestamp
+            format = '%m-%d %I:%M %p'
+            label = dt.strftime(format)
+            labelsWeek.append(label)
+
+        ''' Fill Month Chart Data '''
+        chartdataMonth = []
+        labelsMonth=[]
+        for stamp in timestampsMonth:
+            chartdataMonth.append(stamp.value)
+            dt = stamp.timestamp
+            format = '%m-%d %I:%M %p'
+            label = dt.strftime(format)
+            labelsMonth.append(label)
+        
+
+        ''' Fill Year Chart Data '''
+        chartdataYear = []
+        labelsYear=[]
+        for stamp in timestampsYear:
+            chartdataYear.append(stamp.value)
+            dt = stamp.timestamp
+            format = '%m-%d %I:%M %p'
+            label = dt.strftime(format)
+            labelsYear.append(label)
         
         chartLabel = ""
         data ={
-                     "labels":labels,
+                     "labelsDay":labelsDay,
+                     "labelsWeek":labelsWeek,
+                     "labelsMonth":labelsMonth,
+                     "labelsYear":labelsYear,
                      "chartLabel":chartLabel,
-                     "chartdata":chartdata,
+                     "chartdataDay":chartdataDay,
+                     "chartdataWeek":chartdataWeek,
+                     "chartdataMonth":chartdataMonth,
+                     "chartdataYear":chartdataYear,
                      "slug": slug,
              }
         return Response(data)
@@ -146,19 +226,30 @@ def landing_page(request):
 
 @login_required(login_url='index')
 def portfolio(request):
+
+    # ``` USER INFORMATION ```
     try:
-        teams = UserOwnedTeam.objects.filter(user = request.user)
+        user = request.user
+        teams = UserOwnedTeam.objects.filter(user = user)
     except:
         teams = None
 
-    # make timestamp when user loads their profile
-    current_timestamp = UserValueTimestamp(user=request.user, value=request.user.profile.portfolio_value, timestamp=datetime.datetime.now())
-    current_timestamp.save()
-    
-    # get timestamps from one day
-    date_from = datetime.datetime.now()- datetime.timedelta(days=1)
-    timestamps = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_from).order_by('timestamp')
-    n = timestamps.count()
+    # get user timestamp
+    curStamp = UserValueTimestamp(user=user, value=user.profile.portfolio_value, timestamp=datetime.datetime.now())
+    curStamp.save()
+
+    # update user's portfolio value
+    update_portfolio_value(user, teams)
+
+    # get timestamps (Day, Week, Month, Year)
+    timestamps = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromDay).order_by('timestamp')
+    timestampsWeek = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromWeek).order_by('timestamp')
+    timestampsMonth = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromMonth).order_by('timestamp')
+    timestampsYear = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromYear).order_by('timestamp')
+
+    netGain = {'day': 0, 'week': 0, 'month': 0, 'year': 0, 'sign': '+'}
+
+    n = len(timestamps)
 
     # calculate portfolio's netGain for time period
     if not teams:
@@ -174,9 +265,18 @@ def portfolio(request):
             netGain['sign'] = '+' 
         else:
             netGain['sign'] = '-' 
+
+
+    # ``` FIND YOUR TEAM ```
+   
+
+
+
+
     return render(request=request,
             template_name='portfolio.html',
-            context={'teams': teams, 'netGain':netGain}) 
+            context={'teams': teams, 'netGain':netGain, 
+            }) 
 
 
 @login_required(login_url='index')
@@ -195,10 +295,15 @@ def team_view(request, slug):
     # if user owns shares, calculate current market_value
     if userTeam:
         userTeam.market_value = userTeam.num_shares * team.market_price
+        userTeam.save()
     
     # history of user's transactions with current team
     history = Transaction.objects.filter(user=user, team=team).order_by('date').reverse()
     form = TradeTeam(request.POST or None)
+
+    # save timestamp when page loaded 
+    timestamp = TeamValueTimestamp(team=team, value=team.market_price, timestamp=datetime.datetime.now())
+    timestamp.save()
 
     if request.method == 'POST':
         if form.is_valid():
@@ -275,10 +380,11 @@ def team_view(request, slug):
                     user.profile.buying_power += total_price
                     user.profile.portfolio_value -= total_price
                     user.save()
+            call_command('getTimestamps')
             return redirect("../../team/"+team.slug+'/')
             
     # fetch new about current team
-    articles = fetch_news(team.name)
+    articles = fetch_news(team.full_name)
 
     return render(request=request,
             template_name='team_view.html',
@@ -316,14 +422,30 @@ def banking(request):
 
 @login_required(login_url='index')
 def market(request):
-    top_teams = Team.objects.order_by('market_price')[:10]
+    top_teams = Team.objects.order_by('-market_price')[:10]
+
+    s = leaguestandingsv3.LeagueStandingsV3(season="2020") # hard coded
+    standings = s.get_data_frames()[0]
+    league_leaders = []
+    all_teams = Team.objects.all()
+    for team in all_teams:
+        team_name = str(team.full_name).split(" ")[-1]
+        #logging.debug(team_name)
+        curTeam = standings.loc[standings["TeamName"] == team_name]
+        if curTeam.empty:
+            pass
+        else:
+            if curTeam.PlayoffRank.values[0] <= 6:
+                league_leaders.append(team)
+    
+    league_leaders = sorted(league_leaders ,key = lambda x: x.market_price)
     return render(request=request,
         template_name='market.html',
-        context={'teams':top_teams})
+        context={'top_teams':top_teams, 'league_leaders': league_leaders})
 
 
 
-# ''' Microservices '''
+# ''' Modular functions '''
 
 # Generate News Articles
 def fetch_news(team_name):
@@ -344,4 +466,13 @@ def fetch_news(team_name):
     except:
         return articles
     
-
+def update_portfolio_value(user, owned_teams):
+    # get total portfolio value
+    cur_value = 0
+    if owned_teams:
+        for team in owned_teams:
+            cur_value += team.market_value
+        user.profile.portfolio_value = cur_value    
+    else:
+        user.profile.portfolio_value = 0
+    user.save()

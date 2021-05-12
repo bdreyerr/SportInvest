@@ -20,7 +20,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="index.html">SportsInvest</a></h1>
+						<h1><a href="../">SportsInvest</a></h1>
 						<nav>
 							<a href="#menu">Menu</a>
 						</nav>
@@ -40,6 +40,87 @@
                         <a href="#" class="close">Close</a>
                     </div>
                 </nav>
+
+				<!-- Banner -->
+				<section id="banner">
+					<div class="inner">
+						<form method="post" action="#">
+							{% csrf_token %}
+							<div class="fields">
+								<div class="field">
+									<label for="name">First Name</label>
+									{{form.first_name}}
+									{% if form.first_name.errors %}
+									<ul  class="error">
+										{% for error in form.first_name.errors %}
+											<li>{{ error|escape }}</li>
+										{% endfor %}
+										</ul>
+									{% endif %}
+								</div>
+								<div class="field">
+									<label for="name">Last Name</label>
+									{{form.last_name}}
+									{% if form.last_name.errors %}
+									<ul  class="error">
+										{% for error in form.last_name.errors %}
+											<li>{{ error|escape }}</li>
+										{% endfor %}
+									</ul>
+									{% endif %}
+								</div>
+								<div class="field">
+									<label for="name">Username</label>
+									{{form.username}}
+									{% if form.username.errors %}
+										<ul class="error">
+									{% for error in form.username.errors %}
+										<li>{{ error|escape }}</li>
+									{% endfor %}
+										</ul>
+									{% endif %}
+								</div>
+								<div class="field">
+									<label for="email">Email</label>
+									{{form.email}}
+									{% if form.email.errors %}
+									<ul  class="error">
+										{% for error in form.email.errors %}
+											<li>{{ error|escape }}</li>
+										{% endfor %}
+									</ul>
+									{% endif %}
+								</div>
+								<div class="field">
+									<label for="email">Password</label>
+									{{form.password1}}
+									{% if form.password1.errors %}
+									<ul  class="error">
+										{% for error in form.password1.errors %}
+											<li>{{ error|escape }}</li>
+										{% endfor %}
+									</ul>
+									{% endif %}
+								</div>
+								<div class="field">
+									<label for="email">Confirm Password</label>
+									{{form.password2}}
+									{% if form.password2.errors %}
+									<ul  class="error">
+									{% for error in form.password2.errors %}
+										<li>{{ error|escape }}</li>
+									{% endfor %}
+									</ul>
+								{% endif %}
+								</div>
+																	
+							</div>
+							<ul class="actions">
+								<li><input type="submit" value="Register" /></li>
+							</ul>
+						</form>
+					</div>
+				</section>
 				
 				<!-- Wrapper -->
 					<section id="wrapper">
@@ -49,88 +130,6 @@
 
 						<!-- Content -->
 							<div class="wrapper alt style3">
-								<div class="inner">
-
-								<section>
-									<h3 class="major align-center">Register</h3>
-									<form method="post" action="#">
-										{% csrf_token %}
-										<div class="fields">
-											<div class="field">
-												<label for="name">First Name</label>
-												{{form.first_name}}
-												{% if form.first_name.errors %}
-												<ul  class="error">
-													{% for error in form.first_name.errors %}
-														<li>{{ error|escape }}</li>
-													{% endfor %}
-													</ul>
-												{% endif %}
-											</div>
-											<div class="field">
-												<label for="name">Last Name</label>
-												{{form.last_name}}
-												{% if form.last_name.errors %}
-												<ul  class="error">
-													{% for error in form.last_name.errors %}
-														<li>{{ error|escape }}</li>
-													{% endfor %}
-												</ul>
-												{% endif %}
-											</div>
-											<div class="field">
-												<label for="name">Username</label>
-												{{form.username}}
-												{% if form.username.errors %}
-													<ul class="error">
-												{% for error in form.username.errors %}
-													<li>{{ error|escape }}</li>
-												{% endfor %}
-													</ul>
-												{% endif %}
-											</div>
-											<div class="field">
-												<label for="email">Email</label>
-												{{form.email}}
-												{% if form.email.errors %}
-												<ul  class="error">
-													{% for error in form.email.errors %}
-														<li>{{ error|escape }}</li>
-													{% endfor %}
-												</ul>
-												{% endif %}
-											</div>
-											<div class="field">
-												<label for="email">Password</label>
-												{{form.password1}}
-												{% if form.password1.errors %}
-												<ul  class="error">
-													{% for error in form.password1.errors %}
-														<li>{{ error|escape }}</li>
-													{% endfor %}
-												</ul>
-												{% endif %}
-											</div>
-											<div class="field">
-												<label for="email">Confirm Password</label>
-												{{form.password2}}
-												{% if form.password2.errors %}
-												<ul  class="error">
-												{% for error in form.password2.errors %}
-													<li>{{ error|escape }}</li>
-												{% endfor %}
-												</ul>
-											{% endif %}
-											</div>
-																				
-										</div>
-										<ul class="actions">
-											<li><input type="submit" value="Register" /></li>
-										</ul>
-									</form>
-								</section>
-
-								</div>
 							</div>
 
 				<!-- Footer -->
