@@ -6,6 +6,7 @@ Technologies Used:
 - Django (Backend)
 - HTML/CSS/VanillaJS (Front End)
 - ChartJS
-- New.org API
+- New.org API (https://newsapi.org/)
+- nba-api (https://pypi.org/project/nba-api/)
 
 ![](vid.gif)
