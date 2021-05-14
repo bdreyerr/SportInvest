@@ -19,6 +19,32 @@ var endpoint = '/teamChart/';
 
     function drawLineGraph(data, id) {
 
+    // Hover Line
+    Chart.defaults.LineWithLine = Chart.defaults.line;
+    Chart.controllers.LineWithLine = Chart.controllers.line.extend({
+    draw: function(ease) {
+        Chart.controllers.line.prototype.draw.call(this, ease);
+
+        if (this.chart.tooltip._active && this.chart.tooltip._active.length) {
+            var activePoint = this.chart.tooltip._active[0],
+                ctx = this.chart.ctx,
+                x = activePoint.tooltipPosition().x,
+                topY = this.chart.scales['y-axis-0'].top,
+                bottomY = this.chart.scales['y-axis-0'].bottom;
+
+            // draw line
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#C1C1C1';
+            ctx.stroke();
+            ctx.restore();
+        }
+    }
+    });
+
     // Gradient 
     var ctx = document.getElementById('teamChart').getContext("2d");
     var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
@@ -45,7 +71,7 @@ var endpoint = '/teamChart/';
     var ctx = document.getElementById(id).getContext('2d');
     var chart = new Chart(ctx, {
         // The type of chart we want to create
-        type: 'line',
+        type: 'LineWithLine',
 
         // The data for our dataset
         data: {
@@ -108,7 +134,7 @@ var endpoint = '/teamChart/';
         var context1 = document.getElementById(id).getContext('2d');
         chart = new Chart(context1, {
             // The type of chart we want to create
-            type: 'line',
+            type: 'LineWithLine',
     
             // The data for our dataset
             data: {
@@ -172,7 +198,7 @@ var endpoint = '/teamChart/';
         var context1 = document.getElementById(id).getContext('2d');
         chart = new Chart(context1, {
             // The type of chart we want to create
-            type: 'line',
+            type: 'LineWithLine',
     
             // The data for our dataset
             data: {
@@ -236,7 +262,7 @@ var endpoint = '/teamChart/';
         var context1 = document.getElementById(id).getContext('2d');
         chart = new Chart(context1, {
             // The type of chart we want to create
-            type: 'line',
+            type: 'LineWithLine',
     
             // The data for our dataset
             data: {
@@ -300,7 +326,7 @@ var endpoint = '/teamChart/';
         var context1 = document.getElementById(id).getContext('2d');
         chart = new Chart(context1, {
             // The type of chart we want to create
-            type: 'line',
+            type: 'LineWithLine',
     
             // The data for our dataset
             data: {

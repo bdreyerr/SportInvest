@@ -21,8 +21,11 @@ class Command(BaseCommand):
 
         teams = Team.objects.all()
         for team in teams:
+
+            
+
+            # save timestamps
             teamTimestamp = TeamValueTimestamp(team=team, value=team.market_price, timestamp=datetime.datetime.now())
-            team.market_price = 10
             team.save()
             teamTimestamp.save()
         self.stdout.write(self.style.SUCCESS('Successfully saved all values'))

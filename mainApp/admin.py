@@ -2,7 +2,7 @@ from django.contrib import admin
 from mainApp.models import Team, Transaction, Profile, UserOwnedTeam, UserValueTimestamp, TeamValueTimestamp
 # Register your models here.
 class TeamAdmin(admin.ModelAdmin):
-    fields = ['full_name', 'slug', 'market_price', 'description', 'share_holders', 'bg_image']
+    fields = ['full_name', 'slug', 'market_price', 'description', 'share_holders', 'conference', 'league_standing', 'bg_image']
 admin.site.register(Team, TeamAdmin)
 
 class TransactionAdmin(admin.ModelAdmin):

@@ -45,6 +45,8 @@ class Team(models.Model):
     market_price = models.FloatField(default=1.0)
     description = models.TextField(max_length=400, blank=True)
     share_holders = models.ManyToManyField(User, related_name="owners", blank=True)
+    conference = models.CharField(default="West", max_length=50)
+    league_standing = models.IntegerField(default=0)
     bg_image = models.ImageField(upload_to='uploads/', height_field=None, width_field=None, max_length=None)
     
     class Meta:

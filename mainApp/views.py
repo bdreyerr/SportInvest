@@ -20,9 +20,6 @@ from rest_framework.permissions import IsAuthenticated
 import logging, datetime, requests, json, os
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
 
-# nba-api
-from nba_api.stats.endpoints import leaguestandingsv3
-
 
 
 
@@ -230,7 +227,7 @@ def portfolio(request):
     # ``` USER INFORMATION ```
     try:
         user = request.user
-        teams = UserOwnedTeam.objects.filter(user = user)
+        teams = UserOwnedTeam.objects.filter(user = user).order_by("market_value").reverse()
     except:
         teams = None
 
@@ -422,26 +419,27 @@ def banking(request):
 
 @login_required(login_url='index')
 def market(request):
-    top_teams = Team.objects.order_by('-market_price')[:10]
 
-    s = leaguestandingsv3.LeagueStandingsV3(season="2020") # hard coded
-    standings = s.get_data_frames()[0]
+
+    highest_valued = Team.objects.order_by('-market_price')[:10]
     league_leaders = []
     all_teams = Team.objects.all()
     for team in all_teams:
-        team_name = str(team.full_name).split(" ")[-1]
-        #logging.debug(team_name)
-        curTeam = standings.loc[standings["TeamName"] == team_name]
-        if curTeam.empty:
-            pass
-        else:
-            if curTeam.PlayoffRank.values[0] <= 6:
-                league_leaders.append(team)
+        if team.league_standing <= 6:
+            league_leaders.append(team)
+
+    league_leaders.sort(key= lambda x: x.league_standing)
+    #league_leaders = Team.objects.order_by("league_standing")[:12]
+
+    east = Team.objects.filter(conference="East")
+    west = Team.objects.filter(conference="West")
     
-    league_leaders = sorted(league_leaders ,key = lambda x: x.market_price)
     return render(request=request,
         template_name='market.html',
-        context={'top_teams':top_teams, 'league_leaders': league_leaders})
+        context={'highest_valued':highest_valued, 
+                'league_leaders': league_leaders,
+                'east_teams': east,
+                'west_teams': west    })
 
 
 

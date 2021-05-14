@@ -20,7 +20,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="../">SportsInvest</a></h1>
+						<h1><a href="../portfolio">SportsInvest</a></h1>
 						<nav>
 							<a href="#menu">{{request.user.get_full_name}}</a>
 						</nav>
@@ -48,23 +48,25 @@
 					<section id="wrapper">
 						<header >
 							<h2 class="major align-center">Open Market</h2>
-                                        <h3 class="major align-center">Buying Power: ${{request.user.profile.buying_power|floatformat:2}} </h3>
-                                        <section class="features">
+                                        <h3 class="major align-center">Trending Teams</h3>
+                                        <section class="features" style="padding-left: 2em; padding-right: 2em;">
                                             </article>
                                             <article>
-                                                <h3 class="major" ><a href="#">League Leaders</a></h3>
+                                                <h3 class="major" >League Leaders</h3>
                                                 <table class="table">
                                                     <thead>
                                                         <th>Team</th>
                                                         <th>Market Price</th>
-                                                        <th>Weekly Gain</th>
+                                                        <th>Conference</th>
+                                                        <th>Standing</th>
                                                     </thead>
                                                     <tbody>    
                                                         {% for team in league_leaders %}
                                                             <tr>
                                                                 <td><a href='../team/{{team.slug}}'>{{team.slug}}</a></td>
                                                                 <td> ${{team.market_price |floatformat:2}}</td>
-                                                                <td>something</td>
+                                                                <td>{{team.conference}}</td>
+                                                                <td>{{team.league_standing}}</td>
                                                             </tr>
                                                         {% endfor %}
                                                     </tbody>
@@ -77,19 +79,20 @@
                                             </div>
                                             </article>
                                             <article class=" article alt">
-                                                <h3 class="major" ><a href="#">Highest Valued</a></h3>
+                                                <h3 class="major" >Highest Valued</h3>
                                                 <table class="table">
                                                     <thead>
                                                         <th>Team</th>
                                                         <th>Market Price</th>
-                                                        <th>Weekly Gain</th>
+                                                        
+
                                                     </thead>
                                                     <tbody>    
-                                                        {% for team in top_teams %}
+                                                        {% for team in highest_valued %}
                                                             <tr>
                                                                 <td><a href='../team/{{team.slug}}'>{{team.slug}}</a></td>
                                                                 <td> ${{team.market_price |floatformat:2}}</td>
-                                                                <td>something</td>
+                                                                
                                                             </tr>
                                                         {% endfor %}
                                                     </tbody>
@@ -102,6 +105,61 @@
                                             </div>
                                             </article>
                                         </section>
+                                        <h3 class="major align-center">All Teams</h3>
+                                        <section class="features" style="padding-left: 2em; padding-right: 2em;">
+                                            <article class=" article alt">
+                                                <h3 class="major" >Eastern Conference</h3>
+                                                <table class="table">
+                                                    <thead>
+                                                        <th>Team</th>
+                                                        <th>Market Price</th>
+                                                        
+
+                                                    </thead>
+                                                    <tbody>    
+                                                        {% for team in east_teams %}
+                                                            <tr>
+                                                                <td><a href='../team/{{team.slug}}'>{{team.slug}}</a></td>
+                                                                <td> ${{team.market_price |floatformat:2}}</td>
+                                                                
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                 <div>
+                                            </div>
+                                            </article>
+                                            <article class=" article alt">
+                                                <h3 class="major" >Western Conference</h3>
+                                                <table class="table">
+                                                    <thead>
+                                                        <th>Team</th>
+                                                        <th>Market Price</th>
+                                                        
+
+                                                    </thead>
+                                                    <tbody>    
+                                                        {% for team in west_teams %}
+                                                            <tr>
+                                                                <td><a href='../team/{{team.slug}}'>{{team.slug}}</a></td>
+                                                                <td> ${{team.market_price |floatformat:2}}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                 <div>
+                                            </div>
+                                            </article>
+                                        </section>
+
 						</header>
 
 						<!-- Content -->
