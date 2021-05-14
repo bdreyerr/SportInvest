@@ -239,40 +239,30 @@ def portfolio(request):
     update_portfolio_value(user, teams)
 
     # get timestamps (Day, Week, Month, Year)
-    timestamps = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromDay).order_by('timestamp')
-    timestampsWeek = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromWeek).order_by('timestamp')
-    timestampsMonth = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromMonth).order_by('timestamp')
-    timestampsYear = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromYear).order_by('timestamp')
+    timestamps_day = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromDay).order_by('timestamp')
+    timestamps_week = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromWeek).order_by('timestamp')
+    timestamps_month = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromMonth).order_by('timestamp')
+    timestamps_year = UserValueTimestamp.objects.filter(user=request.user, timestamp__gte=date_fromYear).order_by('timestamp')
 
-    netGain = {'day': 0, 'week': 0, 'month': 0, 'year': 0, 'sign': '+'}
-
-    n = len(timestamps)
 
     # calculate portfolio's netGain for time period
     if not teams:
         netGain = {'value': 0, 'sign':'+'}
     else:
-        start, end = timestamps[0].value, timestamps[n-1].value
-        if end == 0:
-            end = 0.0000001
-        netGain = {}
-        netGain['value'] =  end - start
-        netGain['percentage'] = (1 - (start/end)) * 100
-        if netGain['value'] > 0:
-            netGain['sign'] = '+' 
-        else:
-            netGain['sign'] = '-' 
+        net_gain_day = calculate_net_gain(timestamps_day)
+        net_gain_week = calculate_net_gain(timestamps_week)
+        net_gain_month = calculate_net_gain(timestamps_month)
+        net_gain_year = calculate_net_gain(timestamps_year)
 
 
     # ``` FIND YOUR TEAM ```
    
-
-
-
-
     return render(request=request,
             template_name='portfolio.html',
-            context={'teams': teams, 'netGain':netGain, 
+            context={'teams': teams, 'net_gain_day': net_gain_day, 
+            'net_gain_week': net_gain_week, 
+            'net_gain_month': net_gain_month, 
+            'net_gain_year': net_gain_year, 
             }) 
 
 
@@ -474,3 +464,19 @@ def update_portfolio_value(user, owned_teams):
     else:
         user.profile.portfolio_value = 0
     user.save()
+
+
+# Calculate net Gain
+def calculate_net_gain(timestamps):
+    n = len(timestamps)
+    start, end = timestamps[0].value, timestamps[n-1].value
+    if end == 0:
+        end = 0.0000001
+    netGain = {}
+    netGain['value'] =  end - start
+    netGain['percentage'] = (1 - (start/end)) * 100
+    if netGain['value'] > 0:
+        netGain['sign'] = '+' 
+    else:
+        netGain['sign'] = '-' 
+    return netGain

@@ -44,12 +44,43 @@
                 <section id="banner">
                     <div class="inner">
                         <h2>${{request.user.profile.portfolio_value|floatformat:2}}</h2>
-                        {% if netGain.sign == '+' %}
-                            <p style="color:rgb(15, 250, 78);">+
-                        {% else %}
-                            <p style="color:rgb(255, 99, 82);">
-                        {% endif %}
-                         ${{netGain.value|floatformat:2}} ({{netGain.percentage|floatformat:2}}%) Today</p>
+                        
+                        <div id="net_gain_day" >
+                            {% if net_gain_day.sign == '+' %}
+                                <p style="color:rgb(15, 250, 78);">+
+                            {% else %}
+                                <p style="color:rgb(255, 99, 82);">
+                            {% endif %}
+                            ${{net_gain_day.value|floatformat:2}} Today</p> 
+                        </div>
+
+                        <div id="net_gain_week" style="display: none;">
+                            {% if net_gain_week.sign == '+' %}
+                                <p style="color:rgb(15, 250, 78);">+
+                            {% else %}
+                                <p style="color:rgb(255, 99, 82);">
+                            {% endif %}
+                            ${{net_gain_week.value|floatformat:2}} This Week</p> 
+                        </div>
+
+                        <div id="net_gain_month" style="display: none;">
+                            {% if net_gain_month.sign == '+' %}
+                                <p style="color:rgb(15, 250, 78);">+
+                            {% else %}
+                                <p style="color:rgb(255, 99, 82);">
+                            {% endif %}
+                            ${{net_gain_month.value|floatformat:2}} This Month</p> 
+                        </div>
+
+                        <div id="net_gain_year" style="display: none;">
+                            {% if net_gain_year.sign == '+' %}
+                                <p style="color:rgb(15, 250, 78);">+
+                            {% else %}
+                                <p style="color:rgb(255, 99, 82);">
+                            {% endif %}
+                            ${{net_gain_year.value|floatformat:2}} This Year</p> 
+                        </div>
+                            
                         <div class="row" style="overflow-y:hidden;">
                             <div style="width:60%;">
                                 <div id = "chart-container">

@@ -44,7 +44,7 @@ var endpoint = '/chart';
                     }
                 }
                 });
-                
+
                 // Gradient 
                 var ctx = document.getElementById('chart').getContext("2d");
                 var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
@@ -131,6 +131,14 @@ var endpoint = '/chart';
                 });
 
                 $("#1d").on("click", function() {
+                    // Change net value
+                    
+                    $("#net_gain_week").hide();
+                    $("#net_gain_month").hide();
+                    $("#net_gain_year").hide();
+                    $("#net_gain_day").show();
+
+
                     // delete and re add canvas
                     $('#chart').remove(); // this is my <canvas> element
                     $('#chart-container').append('<canvas id="chart"><canvas>');
@@ -195,6 +203,12 @@ var endpoint = '/chart';
                  });
 
                 $("#1w").on("click", function() {
+                    // net gain hide / show
+                    $("#net_gain_week").show();
+                    $("#net_gain_month").hide();
+                    $("#net_gain_year").hide();
+                    $("#net_gain_day").hide();
+
                     // delete and re add canvas
                     $('#chart').remove(); // this is my <canvas> element
                     $('#chart-container').append('<canvas id="chart"><canvas>');
@@ -259,6 +273,13 @@ var endpoint = '/chart';
                  });
 
                  $("#1m").on("click", function() {
+
+                    // net gain hide / show
+                    $("#net_gain_week").hide();
+                    $("#net_gain_month").show();
+                    $("#net_gain_year").hide();
+                    $("#net_gain_day").hide();
+
                     // delete and re add canvas
                     $('#chart').remove(); // this is my <canvas> element
                     $('#chart-container').append('<canvas id="chart"><canvas>');
@@ -323,6 +344,13 @@ var endpoint = '/chart';
                  });
 
                  $("#1y").on("click", function() {
+
+                    // net gain hide / show
+                    $("#net_gain_week").hide();
+                    $("#net_gain_month").hide();
+                    $("#net_gain_year").show();
+                    $("#net_gain_day").hide();
+
                     // delete and re add canvas
                     $('#chart').remove(); // this is my <canvas> element
                     $('#chart-container').append('<canvas id="chart"><canvas>');
