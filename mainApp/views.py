@@ -1,4 +1,5 @@
 # django
+from sportSite.settings import GOOGLE_CAPTCHA_KEY
 from django.shortcuts import render, redirect
 from .forms import Register, Login, TradeTeam
 from django.contrib.auth.decorators import login_required
@@ -8,6 +9,8 @@ from django.views import generic
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 from django.core.management import call_command
+from django.contrib import messages
+from django.conf import settings
 
 
 # rest framework
@@ -37,14 +40,17 @@ def login_request(request):
                 if user is not None:
                     login(request, user)
                     logging.debug('User Logged in: ' , str(user.username))
+                    messages.success(request, "Logged in")
                     return redirect('portfolio')
                 else:
                     logging.error('user does not exist')
-    logging.error('Login form not valid')
+                    
+            messages.error(request, "Invalid Username or Password")
+    
     form = Login()
     return render(request=request,
             template_name='login.html', 
-            context={'form':form})
+            context={'form':form, "recaptcha_key": settings.GOOGLE_CAPTCHA_KEY})
 
 def logout_request(request):
     logout(request)
@@ -62,7 +68,7 @@ def register(request):
             return redirect('portfolio')
     return render(request=request,
             template_name='register.html', 
-            context={'form': form})
+            context={'form': form, "recaptcha_key": settings.GOOGLE_CAPTCHA_KEY})
 
 # ''' USER AUTHENTICATION '''
 
@@ -311,7 +317,8 @@ def team_view(request, slug):
             if trade_choice == '1':
                 
                 if total_price > user.profile.buying_power:
-                    logging.error("Insufficient Funds (user: " , str(user.username), ', team: ', str(team.name), ')')
+                    logging.error("Insufficient Funds (user: " , str(user.username), ', team: ', str(team.full_name), ')')
+                    messages.error(request, "Insufficient Funds to make this transaction, please check your buying power")
                 else:
                     # if user does not already own stock
                     if not userTeam:
@@ -338,7 +345,7 @@ def team_view(request, slug):
                         userTeam.average_cost = share_weight / userTeam.num_shares
                         userTeam.total_return = userTeam.market_value - (userTeam.average_cost * userTeam.num_shares)
                         userTeam.save()
-
+                        
                         logging.debug("Transaction Completed: User: ", str(user.username), ', Trade type: ', str(trade_choice), ', No. Shares: ', str(num_shares), '(Existing Ownership)')
                     # update user's buying power
                     user.profile.buying_power -= total_price
@@ -346,16 +353,19 @@ def team_view(request, slug):
                     # update user's portfolio value
                     user.profile.portfolio_value += total_price
                     user.save()
+                    messages.success(request, "You just purchased " + str(num_shares) + " share(s) of " +team.slug+ " for $" + str(team.market_price))
 
             # Selling Shares
             elif trade_choice == '2':
 
                 if not userTeam:
                     logging.error("Transaction Error: User: ", str(user.username), ', Trade type: ', str(trade_choice), ', No. Shares: ', str(num_shares), '(Cannot sell un-owned stock)')
+                    messages.error(request, "You do not own any shares of " + team.slug)
                 
                 else:
                     if num_shares > userTeam.num_shares:
                         logging.error('You do not own enough shares to make this transaction')
+                        messages.error(request, "Insufficient No. shares owned, please retry")
                         return redirect("../../team/"+team.slug)
 
                     # subtract team_shares, delete if selling all shares
@@ -366,6 +376,7 @@ def team_view(request, slug):
                     
                     user.profile.buying_power += total_price
                     user.profile.portfolio_value -= total_price
+                    messages.success(request, "You just sold " + str(num_shares) + " share(s) of " +team.slug+ " for $" + str(team.market_price))
                     user.save()
             call_command('getTimestamps')
             return redirect("../../team/"+team.slug+'/')
@@ -375,7 +386,11 @@ def team_view(request, slug):
 
     return render(request=request,
             template_name='team_view.html',
-            context={'team':team, 'form':form, 'userTeam': userTeam, 'history': history, 'articles': articles})
+            context={'team':team, 'form':form, 
+            'userTeam': userTeam, 
+            'history': history, 
+            'articles': articles,
+            "recaptcha_key": settings.GOOGLE_CAPTCHA_KEY})
     
 @login_required(login_url='index')
 def transactions(request):
@@ -407,7 +422,6 @@ def banking(request):
         template_name='banking.html',
         context={})
 
-@login_required(login_url='index')
 def market(request):
 
 
