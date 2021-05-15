@@ -28,7 +28,7 @@ GOOGLE_CAPTCHA_KEY = '6LeDhdIaAAAAAL6j-6q50JJlUBnvGP3ZGeXA9mOC'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '34.212.34.239']
 
 
 # Application definition

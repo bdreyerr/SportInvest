@@ -253,7 +253,7 @@ def portfolio(request):
 
     # calculate portfolio's netGain for time period
     if not teams:
-        netGain = {'value': 0, 'sign':'+'}
+        net_gain_day, net_gain_week, net_gain_month, net_gain_year = {'value': 0, 'sign':'+'}, {'value': 0, 'sign':'+'}, {'value': 0, 'sign':'+'}, {'value': 0, 'sign':'+'}
     else:
         net_gain_day = calculate_net_gain(timestamps_day)
         net_gain_week = calculate_net_gain(timestamps_week)
@@ -394,9 +394,9 @@ def team_view(request, slug):
     
 @login_required(login_url='index')
 def transactions(request):
-    buys = Transaction.objects.filter(user=request.user, trade_choice='1')
+    buys = Transaction.objects.filter(user=request.user, trade_choice='1').order_by("date").reverse()
     buy_paginator = Paginator(buys, 5)
-    sells = Transaction.objects.filter(user=request.user, trade_choice='2')
+    sells = Transaction.objects.filter(user=request.user, trade_choice='2').order_by("date").reverse()
     sell_paginator = Paginator(sells, 5)
     page = request.GET.get('page', 1)
 
