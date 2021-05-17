@@ -1,4 +1,4 @@
 .env
-SportsInvestSSHKey_Pair.pem
-newKey.ppk
+sportsInvestKey.ppk
 requirements-1.txt
+sportSite/secret_keys.py

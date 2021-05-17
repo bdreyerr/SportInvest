@@ -1,5 +1,5 @@
 # django
-from sportSite.settings import GOOGLE_CAPTCHA_KEY
+from sportSite.secret_keys import google_captcha_key, news_api_key
 from django.shortcuts import render, redirect
 from .forms import Register, Login, TradeTeam
 from django.contrib.auth.decorators import login_required
@@ -50,7 +50,7 @@ def login_request(request):
     form = Login()
     return render(request=request,
             template_name='login.html', 
-            context={'form':form, "recaptcha_key": settings.GOOGLE_CAPTCHA_KEY})
+            context={'form':form, "recaptcha_key": google_captcha_key})
 
 def logout_request(request):
     logout(request)
@@ -68,7 +68,7 @@ def register(request):
             return redirect('portfolio')
     return render(request=request,
             template_name='register.html', 
-            context={'form': form, "recaptcha_key": settings.GOOGLE_CAPTCHA_KEY})
+            context={'form': form, "recaptcha_key": google_captcha_key})
 
 
 # ''' SITE CONTENT ''' 
@@ -388,7 +388,7 @@ def team_view(request, slug):
             'userTeam': userTeam, 
             'history': history, 
             'articles': articles,
-            "recaptcha_key": settings.GOOGLE_CAPTCHA_KEY})
+            "recaptcha_key": google_captcha_key})
     
 @login_required(login_url='index')
 def transactions(request):
@@ -452,12 +452,12 @@ def about(request):
 
 # Generate News Articles
 def fetch_news(team_name):
-    apiKey = os.getenv("NEWS_API_KEY")
+    
     team_name.replace(' ', '')
     url = ('https://newsapi.org/v2/everything?'
        'q='+team_name+'&'
        'sortBy=popularity&'
-       'apiKey=27cfc701fd3d4916b9907da921097beb')
+       'apiKey='+news_api_key)
 
     response = requests.get(url)
     data = response.json()

@@ -21,14 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
-NEWS_API_KEY = os.getenv("NEWS_API_KEY")
-GOOGLE_CAPTCHA_KEY = '6LeDhdIaAAAAAL6j-6q50JJlUBnvGP3ZGeXA9mOC'
+from .secret_keys import django_key
+SECRET_KEY = django_key
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '34.212.34.239']
+ALLOWED_HOSTS = ['localhost', 'ec2-54-185-52-193.us-west-2.compute.amazonaws.com']
 
 
 # Application definition
