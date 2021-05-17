@@ -1,2 +1,4 @@
 .env
 SportsInvestSSHKey_Pair.pem
+newKey.ppk
+requirements-1.txt

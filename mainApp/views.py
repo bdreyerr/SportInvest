@@ -70,8 +70,6 @@ def register(request):
             template_name='register.html', 
             context={'form': form, "recaptcha_key": settings.GOOGLE_CAPTCHA_KEY})
 
-# ''' USER AUTHENTICATION '''
-
 
 # ''' SITE CONTENT ''' 
 
@@ -446,6 +444,9 @@ def market(request):
                 'west_teams': west    })
 
 
+def about(request):
+    return render(request=request, template_name="about.html")
+
 
 # ''' Modular functions '''
 
@@ -478,7 +479,6 @@ def update_portfolio_value(user, owned_teams):
     else:
         user.profile.portfolio_value = 0
     user.save()
-
 
 # Calculate net Gain
 def calculate_net_gain(timestamps):

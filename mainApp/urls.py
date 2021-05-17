@@ -16,6 +16,7 @@ urlpatterns = [
     path('market', views.market, name='market'),
     path('chart', views.ChartData.as_view()),
     path('teamChart/<slug:slug>/', views.TeamChartData.as_view()),
+    path('about', views.about, name='about'),
 
 ]
 

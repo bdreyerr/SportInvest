@@ -55,7 +55,7 @@ class Command(BaseCommand):
             yesterday = str( (datetime.datetime.today() - datetime.timedelta(days=1) ).strftime('%m/%d/%Y'))
 
             # find the game
-            gamefinder = leaguegamefinder.LeagueGameFinder(team_id_nullable=team_id, date_from_nullable=today, date_to_nullable=today)
+            gamefinder = leaguegamefinder.LeagueGameFinder(team_id_nullable=team_id, date_from_nullable=yesterday, date_to_nullable=today)
             game = gamefinder.get_data_frames()[0]
             game_id = game["GAME_ID"]
 
