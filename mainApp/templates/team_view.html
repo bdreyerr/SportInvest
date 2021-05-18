@@ -54,7 +54,7 @@
                             var slug = "{{team.slug|escapejs}}";
                         </script>
                         <h2>{{team.slug}}: {{team.full_name}}</h2>
-                        <h2 name="market_price" id="market_price">${{team.market_price}}</h2>
+                        <h2 name="market_price" id="market_price">${{team.market_price|floatformat:2}}</h2>
                         <p>- $13.54 (0.12%) Today</p>
 
                         <div class="grid-container">
